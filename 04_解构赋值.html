@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>解构赋值</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+  // 解构赋值
+
+  /*
+    1. 两边的类型与数量必须一至
+    2. 右边必须是一个正常数据
+    3. 定义与赋值不能分开
+  */
+
+  // 1. 两边的类型与数量必须一至
+
+  // 数组
+  let [a,b,c] = [1,2,3];
+  console.log(a,b,c);
+
+  // json对象
+  // 两边的属性名也必须一至
+  let {e,f,g} = {e:5,f:6,g:7};
+  // 错误写法，e,f,g是取不到值的
+  // let {e,f,g} = {a:5,b:6,c:7};
+  console.log(e,f,g);
+
+  // 复杂混合类型
+  let [{a1,b1},[n1,n2],num,str] = [{a1:12,b1:33},[34,56],32,'xgao'];
+  console.log(a1,b1,n1,n2,num,str);
+
+  // 复杂类型获取特定数据
+  // 对象，数组 这种复杂类型，可以直接合并接受
+  let [obj,arr,num2,str2] = [{a1:12,b1:33},[34,56],32,'xgao'];
+  console.log(obj,arr,num2,str2);
+
+  // 2. 右边必须是一个正常数据
+  // 错误写法1
+  // let {k,n} = {11,22};
+
+  // 错误写法2
+  // 左右类型不一至，左边是数组，右边是Json对象
+  // let [k,m] = {k:1,m:3};
+
+  // 3. 定义与赋值不能分开
+  // 原因：在解构赋值中 let [a3,b3,c3] 并不是定义一个这样的变量，定义和赋值必须放在一起，只不过是一种特殊的定义方式
+  
+  // 报错：Missing initializer in destructuring declaration
+  // let [a3,b3,c3];
+  // [a3,b3,c3] = [1,2,3];
+
+</script>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>变量</title>
+</head>
+<body>
+  
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script type="html">
+  // --------- ES6 之前的问题 -----------
+
+  // 01 - var可以重复定义
+  var a = 1;
+  var a = 2;
+  // 后面的会覆盖前面定义的，在其它语言里面是不允许的
+  console.log(a,'a');
+
+  // 02 - 没有块级作用域
+  if (a > 0){
+    var b = 123;
+  }
+  // 同样能访问b
+  console.log(b,'b');
+
+  // 03 - 没有限制修改，如常量的功能，只要是变量就都能改掉
+
+  // 经典的事件绑定问题,
+  // 问题：无论点击哪一个都是3
+  // 原因：因为var变量的问题，这里的var没有作用域，i = 1 的时候就会覆盖 var i = 0; 的变量，最终 var i = 3; 回调去获取的时候就都是3了
+  var btns = document.getElementsByTagName("button")
+  for(var i=0; i < btns.length; i++){
+
+    btns[i].addEventListener("click",function(){
+      alert(i);
+    });
+  }
+</script>
+
+<script>
+    // --------- ES6解决上面问题的方案 -----------
+  
+    // 01 - 使用 let 定义变量
+    let a = 1;
+    // let a = 2;
+    // 不允许重复定义,报错：Identifier 'a' has already been declared
+    console.log(a,'a');
+  
+    // 02 - 有块级作用域
+    if (a > 0){
+      let b = 123;
+    }
+    // 访问不了b，提示b没有定义，报错：b is not defined
+    // console.log(b,'b');
+  
+    // 03 - 有限制修改功能，常量
+    const c = 666;
+    // 常量不允许修改，报错：Assignment to constant variable.
+    // c = 888;
+  
+    // 经典的事件绑定问题,使用 let 可以解决
+    // 原因：因为let变量有作用域，每次循环 {} 里面就是一个作用域，就是在每次循环的 {} 中定义了一个let i，每个{}中的i不受影响
+    var btns = document.getElementsByTagName("button")
+    for(let i=0; i < btns.length; i++){
+      
+      btns[i].addEventListener("click",function(){
+        alert(i);
+      });
+    }
+
+    // 空的大括号就是一块作用域
+    {
+      let d = 999;
+      console.log(d,'d');
+    }
+    // 无法访问，报：d is not defined
+    // console.log(d);
+
+  </script>
+
+</html>

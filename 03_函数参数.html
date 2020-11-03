@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>函数参数</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+    // 函数参数
+    
+    // ---01 参数扩展/数组展开
+
+    // 参数收集：使用 ... 其中args名字可自定义
+    // 注意：...args 参数只能放在函数参数的最后面
+    function show(a,b,...args){
+      console.log(a,'a');
+      console.log(b,'b');
+      console.log(args,'args');
+    }
+    show(1,2,4,5,6);
+
+    // 数组展开
+    let array = [1,2,3];
+    console.log(1,2,3,'array1');
+    // 同上一样，...array，就是将数组的内容写到这里
+    console.log(...array,'array2');
+
+    // 使用展开的数组做参数
+    function add(a,b,c){
+      console.log(a+b+c,'add');
+    }
+    add(1,2,3);
+    // 同上
+    add(...array);
+
+    // 混合使用
+    // 放在函数参数定义的里面就是 收集参数
+    function test(...args){
+      // 放在其它地址使用就是 展开
+      say(...args);
+    }
+    function say(...args){
+      console.log(args,'say');
+    }
+    test(6,7,8);
+
+
+    // ---02 默认参数
+    
+    // 在参数后面直接赋值就是默认参数
+    function fly(a,b=200,c=100){
+      console.log(a,b,c,'fly');
+    }
+    fly(10);
+
+</script>
+
+</html>

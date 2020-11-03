@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>数组</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+  // 数组
+
+  // map      映射  （一个对一个）
+  // reduce   汇总  （一堆返回一个，如：求和）
+  // filter   过滤器（去掉一部分，保留一部分）
+  // forEach  循环
+
+  // --- 01 - map 映射
+
+  let array = [100,40,23,76,89];
+  // ["及格", "不及格", "不及格", "及格", "及格"]
+  let result = array.map(function(item){
+    return item > 60 ? '及格' : '不及格' 
+  })
+  console.log(result);
+
+  // 实例：根据ID获取对应的用户信息
+  // let ids = [1,2,3,4];
+  // [
+  //   {id:1,name:'xgao'},
+  //   {id:2,name:'qiang'},
+  //   {id:3,name:'hong'},
+  //   {id:4,name:'niu'},
+  // ]
+
+  // --- 02 - reduce 汇总
+
+  // temp 是每次return汇总后的结果，第一次是第一个数据
+  // item 当前遍历的数据
+  // index 索引，从1开始
+  let sum = array.reduce(function(temp,item,index){
+    return temp + item;
+  })
+  console.log(sum,'sum');
+
+  // --- 03 - filter 过滤器
+
+  // 获取大于60的数据
+  let result2 = array.filter(function(item){
+    return item > 60;
+  })
+  console.log(result2,'result2');
+
+  // --- 04 - forEach 循环
+  array.forEach(function(item,index){
+    console.log(item,index,'forEach');
+  })
+
+</script>
+
+</html>

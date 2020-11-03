@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Promise</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+
+// async  将一个函数定义成异步的
+// await  等待一个异步函数的返回结果
+
+// ---- Async定义在普通函数上
+async function show(){
+  return 'helloworld!';
+}
+
+// 使用async 定义函数，会在最外层包一个 Promise 返回
+let promise = show();
+// [object Promise] 
+console.log(promise,'show promise');
+
+promise.then(data=>{
+  console.log(data,'show result');
+})
+
+
+// --- async定义在return Promise函数上，如果有返回Promise，就不会再去包一层Promise了，而是直接返回用户自己的这个Promise
+async function say(){
+  return new Promise((resolve,reject)=>{
+    // 执行一些异步操作
+    resolve('good');
+  })
+}
+
+say().then(data=>{
+  console.log(data,'say result');
+})
+
+// ------- await 等待一个异步函数的返回结果
+// 实例： 实现加减乘法 3个功能
+
+// 1秒后两数相加
+function add(n1,n2){
+
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      // 执行一些异步操作
+      resolve(n1+n2);
+    },1000)
+  })
+}
+
+// 1秒后两数相减
+function sub(n1,n2){
+
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      // 执行一些异步操作
+      resolve(n1-n2);
+    },1000)
+  })
+}
+
+// 1秒后两数相乘
+function mul(n1,n2){
+
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      // 执行一些异步操作
+      resolve(n1*n2);
+    },1000)
+  })
+}
+
+
+// 1、使用Promise
+function test(){
+
+  add(10,20).then(data=>{
+
+    console.log(data,'add');
+    return sub(data,5);
+  }).then(data=>{
+
+    console.log(data,'sub');
+    return mul(data,2);
+  }).then(data=>{
+    console.log(data,'mul');
+  })
+}
+test();
+
+// 2、使用async 、await 
+// await 必须放在 async定义的函数中使用，因为await会等待，所以当前函数必须要是异步的才行，这样就不会影响外面的执行
+async function test2(){
+
+  var addResult = await add(10,20);
+  console.log(addResult,'addResult');
+  
+  var subResult = await sub(addResult,5);
+  console.log(subResult,'subResult');
+
+  var mulResult = await mul(subResult,2);
+  console.log(mulResult,'mulResult');
+}
+test2();
+
+// 可以看出明显使用了 async、await 的代码可读性更高，因为它更像是同步的写法
+
+console.log('game over');
+
+</script>
+</html>

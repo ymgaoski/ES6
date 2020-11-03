@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Promise</title>
+</head>
+<body>
+ 
+</body>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+
+// 创建一个Promise对象
+function createPromise(url){
+  /**
+   *  resolve 成功
+   *  reject  失败
+   */
+  return new Promise(function(resolve,reject){
+    // 这里面写异步代码
+    $.get(url,res => {
+
+      if (res){
+        // 成功回调
+        resolve(res);
+      }else{
+        // 失败回调
+        reject(res);
+      }
+    })
+  })
+
+}
+
+</script>
+
+<script>
+
+// Promise  承若？
+/*
+  Promise的功能主要就是解决回调地狱的问题，就是回调嵌套，写同步调用一样的代码，实现了异步回调
+
+  如下：
+  $.get('/getHome',function(res){
+    //...
+    $.get('/getUser/'+res.id,funciton(res){
+      //...
+      $.get('/getList/'+res.listId,funciton(res){
+        //...
+      })
+    })
+  })
+
+*/
+
+// ----- 简单使用
+let url = 'https://www.imooc.com/search/hotwords';
+let url2 = 'https://www.imooc.com/search/hotwords';
+let url3 = 'https://www.imooc.com/search/hotwords';
+let url4 = 'https://www.imooc.com/search/hotwords';
+
+// 创建Promise
+let promise = createPromise(url);
+
+// 使用then获取结果数据，then 里面return 出去的东西，下面then通过参数获取
+promise.then(data => {
+
+  console.log(data,'步骤1 结果');
+  return createPromise(url2);
+}).then(data => {
+
+  console.log(data,'步骤2 结果');
+  return createPromise(url3);
+}).then(data => {
+
+  console.log(data,'步骤3 结果');
+  return createPromise(url4);
+}).then(data => {
+
+  console.log(data,'步骤4 结果');
+})
+
+
+setTimeout(()=>{
+  all();
+},2000);
+
+setTimeout(()=>{
+  race();
+},4000);
+
+
+// ----- 批量执行
+function all(){
+
+  // Promise.all([p1, p2, p3])用于将多个promise实例，包装成一个新的Promise实例，返回的实例就是普通的promise，当所有的都执行成功才回调
+  Promise.all([
+    createPromise(url),
+    createPromise(url2),
+    createPromise(url3),
+    createPromise(url4)
+  ]).then(res=>{
+    
+    // 实现解构赋值, res 是一个数组，包含之前每个promise对应的结果
+    let [res1,res2,res3,res4] = res;
+
+    console.log('all全部执行完毕！');
+    console.log(res1,'res1');
+    console.log(res2,'res2');
+    console.log(res3,'res3');
+    console.log(res4,'res4');
+  })
+}
+
+//-----  竞速，多个请求，任意一个完成就算完成,只返回第一个完成的
+function race(){
+
+  Promise.race([
+    createPromise(url),
+    createPromise(url2),
+    createPromise(url3),
+    createPromise(url4)
+  ]).then(res=>{
+
+    console.log('race竞速完毕！');
+    console.log(res,'race');
+  })
+}
+
+</script>
+</html>

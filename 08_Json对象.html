@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>JSON对象</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script>
+
+// ---- json对象转字符串
+let json = {a:111,b:222,c:'hello'};
+
+let url = 'http://baidu.com/path?'+ JSON.stringify(json);
+console.log(url,'url');
+
+// URL中含有{ 或}符号需要编码
+url = 'http://baidu.com/path?'+ encodeURIComponent(JSON.stringify(json));
+console.log(url,'url');
+
+// ---- json字符串转对象
+let jsonStr = "{a:111,b:222,c:'hello'}";
+
+// Uncaught SyntaxError: Identifier 'jsonObj' has already been declared
+// 上面的字符串写法是错误的
+// let jsonObj = JSON.parse(jsonStr);
+
+// 正确的JSON字符串写法
+/*
+  1、key 必需要用双引号
+  2、value 如果是字符串也只能用双引号，不能用单引号
+  */
+jsonStr = '{"a":111,"b":222,"c":"hello"}';
+let jsonObj = JSON.parse(jsonStr);
+console.log(jsonObj,'jsonObj');
+
+
+// ---- ES6 Json对象简写
+/*
+  1、key和value是一样的，可以只写一个
+  2、json对象中有函数可以去掉  :function
+      show:function(){....}
+      show(){...}
+*/
+let a = 111;
+let b = 222;
+
+// 正常写法
+let jsonSimple = {a:a,b:b,c:'ccc',show:function(){
+  console.log('show');
+}};
+console.log(jsonSimple,'jsonSimple');
+
+// 简写
+jsonSimple = {a,b,c:'ccc',show(){
+  console.log('show');
+}};
+console.log(jsonSimple,'jsonSimple');
+
+
+
+</script>
+</html>

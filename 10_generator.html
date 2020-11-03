@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>generator生成器</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // 网页输出日志
+  console.slog = console.log;
+  console.log = function(text,...args){
+
+    let others = [];
+    args.forEach(function(item){
+      if (typeof item == 'string'){
+        others.push(`"${item}"`);
+      }else{
+        others.push(item);
+      }
+    })
+    
+    let body = document.getElementsByTagName('body')[0];
+    let node = document.createElement('pre');
+    node.textContent = `${text} ${others.join(" ")}`;
+    body.appendChild(node);
+
+    console.slog(text,...args);
+  }
+</script>
+
+<script type="html">
+
+// generator 生成器，将一个函数拆成多个步骤来执行
+/* 
+    在函数名前加上 * 表示这是个 Generator
+    * 正确写法
+    function * show(){}
+    function *show(){}
+    function* show(){}
+
+    // 错误，中间必须有空格
+    function*show(){}
+*/
+function *show(){
+
+  console.log('aaaaaaaa','a');
+
+  yield;
+
+  console.log('bbbbbbbb','b');
+
+  yield;
+
+  console.log('cccccccc','c');
+}
+
+// 返回的是一个Generator对象
+let gen = show();
+console.log(gen,'gen');
+
+// next表示调用里面的代码，遇到 yield 就会停止 
+gen.next();
+
+// 再调用一下就会继续执行后面的
+gen.next();
+
+// 再调用一下就会继续执行后面的
+gen.next();
+
+</script>
+
+<script>
+  // generator 传参与返回
+  /*
+    generator 主要也是为了解决 异步处理的一些问题，最ES7中 async、await 就是对generator进一步的封装，功能也是一样的
+    用法：执行到某个地方你需要进行发布异步请求，在这后面 直接 yield，在异步请求回调后，再调用 next() 执行下一步，从而实现了 async、await 的效果
+  */
+  function *add(n1,n2){
+
+    let sum = n1 + n2;
+    console.log(sum,'n1 + n2');
+
+    // n3 为传进来的参数, yield sum 为返回出去的值
+    let n3 = yield sum;
+
+    console.log(n3,'n3');
+
+    let sum2 = n3 + 1;
+
+    // n4 为传进来的参数, yield sum2 为返回出去的值
+    let n4 = yield sum2;
+
+    console.log(n4,'n4');
+
+    // 最后一个结果直接用 return 返回，而不是用 yield xxx 返回
+    return n4 + 2;
+  }
+  
+  let gen = add(1,2);
+
+  // 注意，第一个next传不了值的,因为第一个yield之前是直接用 add(n1,n2) 函数本身传进去的
+  let g1 = gen.next(10);
+  // g1是一个对象，内容为： {"value":3,"done":false}
+  console.log(g1,'g1');
+
+  // 所以里面的 n3 将会是 20
+  let g2 = gen.next(20);
+  // {"value":21,"done":false}
+  console.log(g2,'g2');
+
+  // 继续往后执行
+  let g3 = gen.next(20);
+  // 只有执行到最后，done才会为true, {"value":22,"done":true}
+  console.log(g3,'g3');
+  
+</script>
+</html>
