@@ -61,7 +61,7 @@
     // 同上
     add(...array);
 
-    // 混合使用
+    // ---02 混合使用
     // 放在函数参数定义的里面就是 收集参数
     function test(...args){
       // 放在其它地址使用就是 展开
@@ -73,13 +73,21 @@
     test(6,7,8);
 
 
-    // ---02 默认参数
+    // ---03 默认参数
     
     // 在参数后面直接赋值就是默认参数
     function fly(a,b=200,c=100){
       console.log(a,b,c,'fly');
     }
     fly(10);
+
+
+    // ---04 展开参数中可固定前面参数，后面参数接着展开
+    function showtime(...[frist,...other]){
+      console.log(frist,'frist');
+      console.log(other,'other');
+    }
+    showtime(1,2,3,4,5);
 
 </script>
 
