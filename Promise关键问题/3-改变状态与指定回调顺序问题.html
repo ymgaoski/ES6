@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise关键问题 - Promise 改变状态与指定回调的顺序问题</title>
+</head>
+<body>
+    <script>
+      /*
+        2种情况：
+          1、同步操作：改变Promise状态 => 定义回调 => 执行
+          2、异步操作：定义回调 => 改变Promise状态 => 执行
+      */
+      let p = new Promise((resolve, reject) => {
+        // 同步
+        // resolve('OK');
+
+        // 异步
+        setTimeout(() => {
+            resolve('OK');
+        }, 1000);
+      });
+
+      // 定义回调
+      p.then(value => {
+        console.log(value);
+      },reason=>{
+          
+      })
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
  
 </body>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 <script>
   // 网页输出日志
@@ -86,48 +86,53 @@ let url2 = 'https://www.imooc.com/search/hotwords';
 let url3 = 'https://www.imooc.com/search/hotwords';
 let url4 = 'https://www.imooc.com/search/hotwords';
 
-// 创建Promise
-let promise = createPromise(url);
+// // 创建Promise
+// let promise = createPromise(url);
 
-// 使用then获取结果数据，then 里面return 出去的东西，下面then通过参数获取
-promise.then(data => {
+// // 使用then获取结果数据，then 里面return 出去的东西，下面then通过参数获取
+// promise.then(data => {
 
-  console.log(data,'步骤1 结果');
-  return createPromise(url2);
-}).then(data => {
+//   console.log(data,'步骤1 结果');
+//   return createPromise(url2);
+// }).then(data => {
 
-  console.log(data,'步骤2 结果');
-  return createPromise(url3);
-}).then(data => {
+//   console.log(data,'步骤2 结果');
+//   return createPromise(url3);
+// }).then(data => {
 
-  console.log(data,'步骤3 结果');
-  return createPromise(url4);
-}).then(data => {
+//   console.log(data,'步骤3 结果');
+//   return createPromise(url4);
+// }).then(data => {
 
-  console.log(data,'步骤4 结果');
-})
+//   console.log(data,'步骤4 结果');
+// })
 
 
 setTimeout(()=>{
   all();
 },2000);
 
-setTimeout(()=>{
-  race();
-},4000);
+// setTimeout(()=>{
+//   race();
+// },4000);
 
 
 // ----- 批量执行
 function all(){
 
-  // Promise.all([p1, p2, p3])用于将多个promise实例，包装成一个新的Promise实例，返回的实例就是普通的promise，当所有的都执行成功才回调
+  // Promise.all([p1, p2, p3])用于将多个promise实例，包装成一个新的Promise实例，返回的实例就是普通的promise，当所有的都执行成功才回调，
   Promise.all([
+    new Promise((resolve,reject) => {
+      setTimeout(() => {
+        resolve('我是对的');
+        // reject('我错了')
+      }, 1000);
+    }),
     createPromise(url),
     createPromise(url2),
     createPromise(url3),
     createPromise(url4)
-  ]).then(res=>{
-    
+  ]).then((res,error) =>{
     // 实现解构赋值, res 是一个数组，包含之前每个promise对应的结果
     let [res1,res2,res3,res4] = res;
 
@@ -136,21 +141,31 @@ function all(){
     console.log(res2,'res2');
     console.log(res3,'res3');
     console.log(res4,'res4');
+  }).catch(error => {
+    console.log(error,'执行失败');
   })
 }
 
-//-----  竞速，多个请求，任意一个完成就算完成,只返回第一个完成的
+//-----  竞速，多个请求，任意一个完成(无论是成功还是失败)就算完成,只返回第一个完成的
 function race(){
 
   Promise.race([
+    new Promise((resolve,reject) => {
+      setTimeout(() => {
+        reject('我错了')
+      }, 1000);
+
+      // reject('我错了')
+    }),
     createPromise(url),
     createPromise(url2),
     createPromise(url3),
     createPromise(url4)
   ]).then(res=>{
-
     console.log('race竞速完毕！');
     console.log(res,'race');
+  }).catch(error => {
+    console.log(error,'执行失败');
   })
 }
 
