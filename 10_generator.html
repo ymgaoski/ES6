@@ -119,4 +119,60 @@ gen.next();
   console.log(g3,'g3');
   
 </script>
+
+<script>
+// 案例1：ID累加生成器
+console.log('--------案例1：ID累加生成器');
+
+function * createIdMark(){
+  let id = 1;
+  while(true){
+    yield id++;
+  }
+}
+
+let idMark = createIdMark();
+console.log(idMark.next().value);
+console.log(idMark.next().value);
+console.log(idMark.next().value);
+
+
+console.log('--------使用闭包实现ID累加生成器');
+// 使用闭包实现ID累加生成器
+function createIdMark2(){
+  let id = 1;
+  return function(){
+    return id++;
+  }
+}
+
+let idMark2 = createIdMark2();
+console.log(idMark2());
+console.log(idMark2());
+console.log(idMark2());
+
+</script>
+
+<script>
+  
+  console.log('案例2：使用generator实现Iterator');
+
+  // 案例2：使用generator实现Iterator
+  const todos = {
+    life: ['吃饭','睡觉','打豆豆'],
+    learn: ['语文','数学','英文'],
+    work: ['打球','听歌'],
+    
+    [Symbol.iterator] : function * (){
+      const all = [...this.life,...this.learn,...this.work];
+      for (const item of all) {
+        yield item;
+      }
+    }
+  }
+
+  for (const item of todos) {
+    console.log(item);
+  }
+</script>
 </html>

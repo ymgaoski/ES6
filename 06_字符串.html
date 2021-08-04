@@ -53,6 +53,8 @@
   // 字符串模板，可拆行，可替换内容
   let name = 'xgao';
   let age = 18;
+  let sex = 1;
+
   // `` 为反单引号，在键盘数值1的左边
   let str = `
     <div>
@@ -62,6 +64,18 @@
   `;
   console.log(str);
 
+
+  // 带标签的字符串模板
+  // 作用：
+  // 1、可以对字符串进行格式化
+  // 2、对字符串进行加密
+  // 3、实现简单的JS模板
+  function test(strings,name,sex){
+    let sexStr = sex ? '男' : '女'; 
+    return strings[0] + name + strings[1] + sexStr;
+  }
+  str = test`你好，我叫${name},性别：${sex}`;
+  console.log(str);
 </script>
 
 </html>

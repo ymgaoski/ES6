@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Reflect</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // // 网页输出日志
+  // console.slog = console.log;
+  // console.log = function(text,...args){
+
+  //   let others = [];
+  //   args.forEach(function(item){
+  //     if (typeof item == 'string'){
+  //       others.push(`"${item}"`);
+  //     }else{
+  //       others.push(item);
+  //     }
+  //   })
+    
+  //   let body = document.getElementsByTagName('body')[0];
+  //   let node = document.createElement('pre');
+  //   node.textContent = `${text} ${others.join(" ")}`;
+  //   body.appendChild(node);
+
+  //   console.slog(text,...args);
+  // }
+</script>
+
+<script>
+  // Reflect 提供了一套统一操作对象的API
+
+  const obj = {
+    name: 'xgao',
+    age: 28,
+    sex: 1
+  }
+
+  // // 判断某个属性是否在指定对象中
+  // console.log('name' in obj);
+  // // 删除某个对象的属性
+  // console.log(delete obj.age);
+  // // 获取对象的所有keys
+  // console.log(Object.keys(obj));
+
+  // 上面3种操作都是对对象进行操作，却用了3种方式，太麻烦
+
+  // 等效上面的方法
+  console.log(Reflect.has(obj,'name'));
+  console.log(Reflect.deleteProperty(obj,'age'));
+  console.log(Reflect.ownKeys(obj)); 
+
+  console.log(obj);
+</script>
+</html>

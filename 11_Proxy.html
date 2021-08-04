@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Proxy代理</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // // 网页输出日志
+  // console.slog = console.log;
+  // console.log = function(text,...args){
+
+  //   let others = [];
+  //   args.forEach(function(item){
+  //     if (typeof item == 'string'){
+  //       others.push(`"${item}"`);
+  //     }else{
+  //       others.push(item);
+  //     }
+  //   })
+    
+  //   let body = document.getElementsByTagName('body')[0];
+  //   let node = document.createElement('pre');
+  //   node.textContent = `${text} ${others.join(" ")}`;
+  //   body.appendChild(node);
+
+  //   console.slog(text,...args);
+  // }
+</script>
+
+<script>
+ 
+  const person = {
+    name: 'xgao',
+    age: 28
+  }
+
+  // 创建代理对象
+  // 参数1：要代理的对象
+  // 参数2：用于处理的对象
+  let personProxy = new Proxy(person,{
+    // target 获取哪个对象上的属性
+    // property 获取的是哪个属性名
+    get(target,property){
+      console.log(target,property,'get val');
+      return property in target ? target[property] : 'default';
+    },
+    // value 设置的值
+    set(target,property,value){
+      console.log(target,property,value,'set val');
+      target[property] = value;
+    },
+    // 代理方法，还有其它很多可以代理的方法：has|getProperty|setProperty|defineProperty|ownKeys|apply|construct 等
+    deleteProperty(target,property){
+      console.log('delete:',property);
+      delete target[property];
+    }
+  })
+
+  // 访问代理对象的属性
+  console.log(personProxy.name);
+  console.log(personProxy.name2);
+
+  // 设置代理对象的属性
+  personProxy.age = 30;
+  personProxy.clazz = '405班';
+
+  console.log(personProxy.clazz);
+
+  delete personProxy.age;
+  console.log(personProxy);
+</script>
+</html>

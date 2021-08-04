@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>for of</title>
+</head>
+<body>
+ 
+</body>
+
+<script>
+  // // 网页输出日志
+  // console.slog = console.log;
+  // console.log = function(text,...args){
+
+  //   let others = [];
+  //   args.forEach(function(item){
+  //     if (typeof item == 'string'){
+  //       others.push(`"${item}"`);
+  //     }else{
+  //       others.push(item);
+  //     }
+  //   })
+    
+  //   let body = document.getElementsByTagName('body')[0];
+  //   let node = document.createElement('pre');
+  //   node.textContent = `${text} ${others.join(" ")}`;
+  //   body.appendChild(node);
+
+  //   console.slog(text,...args);
+  // }
+</script>
+
+<script>
+  // for of 用于便利任何数据结构
+
+  // 数组
+  console.log('-------数组');
+  const array = [1,2,3,4,5];
+  for (const item of array) {
+    console.log(item);
+  }
+
+  // set
+  console.log('-------set');
+  const set = new Set([10,20,30,30,40,50,50,60]);
+  for (const item of set) {
+    console.log(item);
+  }
+
+  // map
+  console.log('-------map');
+  const map = new Map();
+  map.set("name","xgao");
+  map.set("age",23);
+  map.set("sex","男");
+  for (const [key,value] of map) {
+    console.log(key,value);
+  }
+
+  // 自定义对象
+  // 默认不支持，需要实现Iterator，上面可便利的对象原型对象中都有一个 Symbol(Symbol.iterator) 函数
+  // Iterator的作用：往外提供统一的可遍历的对象，外部无需知道内部结构与处理逻辑
+  // 迭代器模式
+  console.log('--------自定义对象');
+  const todos = {
+    life: ['吃饭','睡觉','打豆豆'],
+    learn: ['语文','数学','英文'],
+    work: ['打球','听歌'],
+
+    [Symbol.iterator]: function(){
+      // const all = [].concat(this.life,this.learn,this.work);
+      const all = [...this.life,...this.learn,...this.work];
+      let index = 0;
+      return {
+        next: function(){
+          index++;
+          return {
+            value: all[index],
+            done: index >= all.length
+          }
+        }
+      }
+    }
+  }
+
+  // 没实现Iterator会报： Uncaught TypeError: person is not iterable
+
+  for (const item of todos) {
+    console.log(item); //13_for of.html:109 Uncaught TypeError: person is not iterable
+  }
+
+</script>
+</html>
